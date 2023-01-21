@@ -8,7 +8,9 @@ export class CreateClientUseCase {
     // Validar se o cliente existe
     const clientExists = await prisma.clients.findFirst({
       where: {
-        username
+        username: {
+          equals: username,
+        }
       }
     })
 

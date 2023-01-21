@@ -8,7 +8,9 @@ export class CreateDeliverymanUseCase {
     // Verificar se ja existe um delivery
     const deliveryExists = await prisma.deliveryman.findFirst({
       where: {
-        username,
+        username: {
+          equals: username,
+        }
       }
     })
 
