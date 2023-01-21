@@ -1,36 +1,35 @@
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
-import { prisma } from "../../../../../database/prismaClient";
-import { ICreateUser } from "../../../../../dtos/UserDTO";
+import { prisma } from "../../../database/prismaClient";
+import { ICreateUser } from "../../../dtos/UserDTO";
 
 
-
-export class AuthenticateDeliveryUseCase {
+export class AuthenticateClientUseCase {
   async execute({ username, password }: ICreateUser) {
     // Receber username, password
 
-    // Verificar se o deliveryman cadastrado
-    const deliveryman = await prisma.deliveryman.findFirst({
+    // Verificar se o username cadastrado
+    const client = await prisma.clients.findFirst({
       where: {
         username,
       }
     })
 
 
-    if (!deliveryman) {
+    if (!client) {
       throw new Error("Username or password invalid!")
     }
 
     // Verificar se senha corresponde ao seu username
-    const passwordMatch = await compare(password, deliveryman.password);
+    const passwordMatch = await compare(password, client.password);
 
     if (!passwordMatch) {
       throw new Error("Username or password invalid!")
     }
 
     // Gerar token
-    const token = sign({ username }, "16c1767eb229c41a5670ae626ac934a8", {
-      subject: deliveryman.id,
+    const token = sign({ username }, "1bdfa317c7abff4bb7ad1e5657e268f7", {
+      subject: client.id,
       expiresIn: "1d"
     })
 
