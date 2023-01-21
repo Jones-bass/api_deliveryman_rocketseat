@@ -1,5 +1,5 @@
 
-export interface ICreateClient {
+export interface ICreateUser {
   username: string
   password: string
 }

@@ -4,32 +4,33 @@ import { prisma } from "../../../../../database/prismaClient";
 import { ICreateUser } from "../../../../../dtos/UserDTO";
 
 
-export class AuthenticateClientUseCase {
+
+export class AuthenticateDeliveryUseCase {
   async execute({ username, password }: ICreateUser) {
     // Receber username, password
 
-    // Verificar se o username cadastrado
-    const client = await prisma.clients.findFirst({
+    // Verificar se o deliveryman cadastrado
+    const deliveryman = await prisma.deliveryman.findFirst({
       where: {
         username,
       }
     })
 
 
-    if (!client) {
+    if (!deliveryman) {
       throw new Error("Username or password invalid!")
     }
 
     // Verificar se senha corresponde ao seu username
-    const passwordMatch = await compare(password, client.password);
+    const passwordMatch = await compare(password, deliveryman.password);
 
     if (!passwordMatch) {
       throw new Error("Username or password invalid!")
     }
 
     // Gerar token
-    const token = sign({ username }, "1bdfa317c7abff4bb7ad1e5657e268f7", {
-      subject: client.id,
+    const token = sign({ username }, "16c1767eb229c41a5670ae626ac934a8", {
+      subject: deliveryman.id,
       expiresIn: "1d"
     })
 

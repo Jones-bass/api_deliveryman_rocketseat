@@ -3,29 +3,30 @@ import { prisma } from "../../../../database/prismaClient";
 import { ICreateUser } from "../../../../dtos/UserDTO";
 
 
-export class CreateClientUseCase {
+export class CreateDeliverymanUseCase {
   async execute({ password, username}: ICreateUser) {
-    // Validar se o cliente existe
-    const clientExists = await prisma.clients.findFirst({
+    // Verificar se ja existe um delivery
+    const deliveryExists = await prisma.deliveryman.findFirst({
       where: {
-        username
+        username,
       }
     })
 
-    if(clientExists) {
-      throw new Error("Client already exists")
+    if(deliveryExists) {
+      throw new Error("Deliveryman already exists")
     }
+
     // Criptografar a senha
     const hashPassword = await hash(password, 10);
-
-    // Salvar a senha
-    const client = await prisma.clients.create({
+    
+    // Salvar a senha do delivery
+    const delivery = await prisma.deliveryman.create({
       data: {
         username,
         password: hashPassword,
       },
     });
 
-    return client;
+    return delivery;
   } 
-}
+} 
